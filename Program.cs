@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace BubbleSort
+namespace CountingSort
 {
-    class BubbleSort
+    class CountingSort
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -17,34 +17,54 @@ namespace BubbleSort
                 array[i] = RNumber.Next(1, 1000000);
             }
 
-            int temp;
-            Console.WriteLine("Wait until array is sorted...");
+            Console.WriteLine("Array is sorting...");
 
             //Console.Write("Unsorted array: ");
             //Print(array);
 
-            for (int i = 0; i <= array.Length - 2; i++)
-
-            {
-                for (int j = 0; j <= array.Length - 2; j++)
-                {
-                    if (array[j] > array[j + 1])
-                    {
-                        temp = array[j + 1];
-                        array[j + 1] = array[j];
-                        array[j] = temp;
-                    }
-                }
-            }
+            
 
             Console.Write("Sorted array: ");
             Print(array);
-            watch.Stop();
             var timeforelapse = watch.ElapsedMilliseconds;
 
             Console.WriteLine("Elapsed Time is {0} ms", timeforelapse);
-
             Console.ReadLine();
+
+            Sort(array);
+        }
+        static void Sort(int[] array)
+        {
+            int length = array.Length;
+
+            int[] output = new int[length];
+
+            int[] count = new int[1000000];
+
+            for (int i = 0; i < 100; ++i)
+            {
+                count[i] = 0;
+            }
+            for (int i = 0; i < length; ++i)
+            {
+                ++count[array[i]];
+            }
+
+            for (int i = 1; i <= 99; ++i)
+            {
+                count[i] += count[i - 1];
+            }
+
+            for (int i = length - 1; i >= 0; i--)
+            {
+                output[count[array[i]] - 1] = array[i];
+                --count[array[i]];
+            }
+
+            for (int i = 0; i < length; ++i)
+            {
+                array[i] = output[i];
+            }
         }
 
         private static void Print(int[] array)
@@ -58,4 +78,3 @@ namespace BubbleSort
         }
     }
 }
-
